@@ -1,0 +1,74 @@
+---
+title: "Analysis of the mtcars Dataset"
+author: "Akarsh Katiyar"
+date: "5th november 2020"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+  slidy_presentation: default
+  ioslides_presentation: default
+mode: selfcontained
+job: Reproducible Pitch Presentation
+subtitle: Variables and MPG
+highlighter: highlight.js
+widgets: bootstrap
+---
+
+## Coursera Reproducible Pitch
+
+---
+
+## mtcars Dataset
+
+### Motor Trend Car Road Tests
+
+> The extraction of this data has been done from a US magazine known as Motor Trend and it comprises of the fuel consumptions and other 10 aspects of vehicular design and perf. for 32 different vehicles(1973-74 models).
+
+### Source
+> Biometrics, 37, 391-411, Building regression models interactively, Henderson and Vellman(1981)
+
+```{r}
+library(datasets)
+head(mtcars, 3)
+```
+---
+
+## mtcars Dataset - Format
+
+**Number of observations 32, 11 variables.**
+
+| Index | Field | Detail |
+------- | ----- | ------ |
+| [, 1] | mpg | Miles/(US) gallon |
+| [, 2]  | cyl | Number of cylinders |
+| [, 3]	| d | Displacement (cu.in.) |
+| [, 4]	| hp | total brake horsepower |
+| [, 5]	| rat | Rear axle ratio |
+| [, 6]	| w | Weight (lb/1000) |
+| [, 7]	| q | 1/4 mile time |
+| [, 8]	| vs | V/S |
+| [, 9]	| gt | gear trans. (0 = automatic, 1 = manual) |
+| [,10]	| gr | count of forward gears |
+| [,11]	| cb | count of carburetors |
+
+---
+
+## Analysis - Main Code
+
+```r
+  formulaTextPoint <- reactive({
+    paste("mpg ~", "as.integer(", input$variable, ")")  })
+  
+  fit <- reactive({
+    lm(as.formula(formulaTextPoint()), data=mpgData)  })
+  ...
+  output$fit <- renderPrint({
+    summary(fit()) })
+  
+  output$mpgPlot <- renderPlot({
+    with(mpgData, {
+      plot(as.formula(formulaTextPoint()))
+      abline(fit(), col=2)
+    })  })
+```
